@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlogWebsiteCore\BlogWebsiteCore.csproj" />
+    <ProjectReference Include="..\Classes\Classes.csproj" />
   </ItemGroup>
 
 </Project>
