@@ -1,0 +1,11 @@
+﻿<h1>Create Blog</h1>
+
+<div class="container">
+	<form action="@Url.Action("CreateBlog", "Blog")" method="post">
+		<div class="form-group">
+			<label>Title:</label>
+			<input type="text" class="form-control" name="blogTitle" />
+		</div>
+		<input type="submit" value="Create" class="btn btn-primary" />
+	</form>
+</div>
