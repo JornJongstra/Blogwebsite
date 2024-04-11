@@ -1,3 +1,5 @@
+using BlogWebsite.Controllers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,6 +19,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+//app.UseEndpoints(endpoint =>
+//{
+//    endpoint.Map("/Home", async (context) =>
+//    {
+//        await context.Response.WriteAsync("You are in home");
+//    });
+//});
 
 app.UseAuthorization();
 

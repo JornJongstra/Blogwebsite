@@ -7,7 +7,17 @@ namespace BlogWebsite.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return View("Index");
+        }
+
+        public IActionResult Create()
+        {
+            return View("Create");
+        }
+
+        public IActionResult Update()
+        {
+            return View("Update");
         }
 
         public IActionResult CreateBlog(string blogTitle)

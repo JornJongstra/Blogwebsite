@@ -17,8 +17,11 @@ namespace BlogWebsiteData
             SqlConnection sqlConnection = new SqlConnection(ConnectionString);
             sqlConnection.Open();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[Blogs] values (@Title)", sqlConnection);
+            SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[Blogs] values (@Title, @Text, @Slug, @User_id)", sqlConnection);
             cmd.Parameters.AddWithValue("@Title", Title);
+            cmd.Parameters.AddWithValue("@Text", "");
+            cmd.Parameters.AddWithValue("@Slug", "");
+            cmd.Parameters.AddWithValue("@User_id", 1);
             cmd.ExecuteNonQuery();
             sqlConnection.Close();
 
