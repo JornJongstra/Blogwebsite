@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlogWebsiteData\BlogWebsiteData.csproj" />
-    <ProjectReference Include="..\Classes\Classes.csproj" />
   </ItemGroup>
 
 </Project>
