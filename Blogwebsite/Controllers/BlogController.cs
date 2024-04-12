@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BlogWebsiteCore;
+using Classes;
 
 namespace BlogWebsite.Controllers
 {
@@ -27,9 +28,11 @@ namespace BlogWebsite.Controllers
                 return RedirectToAction("Create");
             }
 
-            BlogWebsiteCore.BlogCoreManager blog = new BlogWebsiteCore.BlogCoreManager();
+            Blog blog = new Blog();
+            BlogCoreManager blogCoreManager = new BlogCoreManager();
+
             blog.Title = blogTitle;
-            if (blog.CreateBlog())
+            if (blogCoreManager.CreateBlog(blog))
             {
                 return RedirectToAction("Index");
             }
