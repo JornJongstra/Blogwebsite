@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BlogWebsiteData;
 using Classes;
 
 namespace BlogWebsiteCore
@@ -13,14 +12,24 @@ namespace BlogWebsiteCore
         public bool CreateBlog(Blog blog)
         {
 	        if (!ValidateBlog(blog)) return false;
-	        BlogDataManager blogDataManager = new BlogWebsiteData.BlogDataManager();
-	        if (blogDataManager.Create(blog))
+	        if (ServiceHandler.Service.CreateBlog(blog))
 	        {
 	            return true;
 	        }
 
 	        return false;
         }
+
+        public bool UpdateBlog(Blog blog)
+        {
+	        if (!ValidateBlog(blog)) return false;
+			if (ServiceHandler.Service.UpdateBlog(blog))
+			{
+				return true;
+			}
+
+			return false;
+		}
 
         private bool ValidateBlog(Blog blog)
         {
@@ -31,6 +40,16 @@ namespace BlogWebsiteCore
             if (string.IsNullOrWhiteSpace(blog.CreatedDateTime.ToString())) return false;
             
             return true;
+        }
+
+        public Blog GetBlog(int id)
+        {
+	        return ServiceHandler.Service.GetBlog(id);
+        }
+
+        public List<Blog> GetBlogs()
+        {
+	        return ServiceHandler.Service.GetBlogs();
         }
     }
 }

@@ -1,1 +1,20 @@
 ﻿<h1>Update</h1>
+
+<div class="container">
+	<form action="@Url.Action("UpdateBlog", "Blog")" method="post">
+		<div class="form-group row">
+			<label>Title:</label>
+			<input type="text" class="form-control" name="blogTitle" />
+			<label>Category:</label>
+			<select name="blogCategories" id="blogCategories" multiple size="2">
+				@foreach (var category in ViewBag.MyList)
+				{
+					<option value="@category.Id">@category.Name</option>
+				}
+			</select>
+			<label>Text:</label>
+			<input type="text" class="form-control" name="blogText" />
+		</div>
+		<input type="submit" value="Create" class="btn btn-primary" />
+	</form>
+</div>

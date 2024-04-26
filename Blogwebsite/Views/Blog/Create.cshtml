@@ -1,10 +1,28 @@
-﻿<h1>Create Blog</h1>
+﻿@using Classes
+@using System.Collections
+@ViewBag.MyList
+@*
+@{
+	var categories = ViewData["categories"];
+}
+*@
+
+<h1 class="text-center">Create Blog</h1>
 
 <div class="container">
 	<form action="@Url.Action("CreateBlog", "Blog")" method="post">
-		<div class="form-group">
+		<div class="form-group row">
 			<label>Title:</label>
 			<input type="text" class="form-control" name="blogTitle" />
+			<label>Category:</label>
+			<select name="blogCategories" id="blogCategories" multiple size="2">
+				@foreach (var category in ViewBag.MyList)
+				{
+					<option value="@category.Id">@category.Name</option>
+				}
+			</select>
+			<label>Text:</label>
+			<input type="text" class="form-control" name="blogText" />
 		</div>
 		<input type="submit" value="Create" class="btn btn-primary" />
 	</form>

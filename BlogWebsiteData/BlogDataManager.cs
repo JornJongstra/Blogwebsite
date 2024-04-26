@@ -7,7 +7,7 @@ namespace BlogWebsiteData
     {
         private readonly string ConnectionString = "Data Source=DESKTOP-5DRN057\\SQLEXPRESS;Initial Catalog=Blogger;Integrated Security=True;Connect Timeout=30;Encrypt=False";
 
-        public bool Create(Blog blog)
+        public bool CreateBlog(Blog blog)
         {
 	        try
 	        {
@@ -34,7 +34,7 @@ namespace BlogWebsiteData
 	        }
         }
 
-        public bool Update(Blog blog)
+        public bool UpdateBlog(Blog blog)
         {
 	        try
 	        {
@@ -61,7 +61,7 @@ namespace BlogWebsiteData
 	        }
         }
 
-        public bool Delete(Blog blog)
+        public bool DeleteBlog(Blog blog)
         {
 	        try
 	        {
@@ -87,40 +87,69 @@ namespace BlogWebsiteData
 
         public Blog GetBlog(int id)
         {
-	        try
-	        {
-		        using var sqlConnection = new SqlConnection(ConnectionString);
+	        Blog blog = new Blog();
+	        blog.Id = id;
+	        blog.Title = "Sport";
+	        blog.Text = "Lorem";
+	        blog.CreatedDateTime = DateTime.Now;
+	        return blog;
 
-		        sqlConnection.Open();
+	        /*try
+            {
+                using var sqlConnection = new SqlConnection(ConnectionString);
 
-		        Blog blog = new Blog();
+                sqlConnection.Open();
 
-				SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[Blogs] WHERE id = '@Id'", sqlConnection);
+                Blog blog = new Blog();
 
-		        cmd.Parameters.AddWithValue("@Id", id);
+		        SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[Blogs] WHERE id = '@Id'", sqlConnection);
 
-		        using (SqlDataReader reader = cmd.ExecuteReader())
-		        {
-			        if (reader.Read())
-			        {
-				        blog.Id = reader.GetInt32(0);
-						blog.Title = reader.GetString(1);
-						blog.Text = reader.GetString(2);
-						blog.Slug = reader.GetString(3);
+                cmd.Parameters.AddWithValue("@Id", id);
 
-					}
-		        }
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+	                if (reader.Read())
+	                {
+		                blog.Id = reader.GetInt32(0);
+				        blog.Title = reader.GetString(1);
+				        blog.Text = reader.GetString(2);
+				        blog.Slug = reader.GetString(3);
 
-		        cmd.ExecuteNonQuery();
+			        }
+                }
 
-		        sqlConnection.Close();
+                cmd.ExecuteNonQuery();
 
-		        return blog;
-			}
-	        catch (Exception)
-	        {
-		        return null;
+                sqlConnection.Close();
+
+                return blog;
 	        }
+            catch (Exception)
+            {
+                return null;
+            }*/
         }
+
+        public List<Blog> GetBlogs()
+        {
+	        List<Blog> blogs = new List<Blog>();
+
+	        Blog blog = new Blog();
+	        blog.Id = 2;
+	        blog.Title = "Sport";
+	        blog.Text = "Lorem";
+	        blog.CreatedDateTime = DateTime.Now;
+
+	        Blog blog2 = new Blog();
+	        blog2.Id = 1;
+	        blog2.Title = "Hobby";
+	        blog2.Text = "Lorem";
+	        blog2.CreatedDateTime = DateTime.Now;
+
+			blogs.Add(blog);
+			blogs.Add(blog2);
+
+			return blogs;
+		}
     }
 }
