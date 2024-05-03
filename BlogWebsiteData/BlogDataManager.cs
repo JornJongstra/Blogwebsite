@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
+using System.Data.SqlClient;
 using Classes;
 
 namespace BlogWebsiteData
@@ -87,14 +88,7 @@ namespace BlogWebsiteData
 
         public Blog GetBlog(int id)
         {
-	        Blog blog = new Blog();
-	        blog.Id = id;
-	        blog.Title = "Sport";
-	        blog.Text = "Lorem";
-	        blog.CreatedDateTime = DateTime.Now;
-	        return blog;
-
-	        /*try
+	        try
             {
                 using var sqlConnection = new SqlConnection(ConnectionString);
 
@@ -102,9 +96,11 @@ namespace BlogWebsiteData
 
                 Blog blog = new Blog();
 
-		        SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[Blogs] WHERE id = '@Id'", sqlConnection);
+		        SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.Title, Blogs.Text, Users.Username FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id WHERE Blogs.Id = @Id;", sqlConnection);
 
-                cmd.Parameters.AddWithValue("@Id", id);
+				cmd.Parameters.Add("@Id", SqlDbType.Int);
+				cmd.Parameters["@Id"].Value = id;
+                //cmd.Parameters.AddWithValue("@Id", id);
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -113,8 +109,7 @@ namespace BlogWebsiteData
 		                blog.Id = reader.GetInt32(0);
 				        blog.Title = reader.GetString(1);
 				        blog.Text = reader.GetString(2);
-				        blog.Slug = reader.GetString(3);
-
+				        blog.Author = reader.GetString(3);
 			        }
                 }
 
@@ -127,29 +122,46 @@ namespace BlogWebsiteData
             catch (Exception)
             {
                 return null;
-            }*/
+            }
         }
 
         public List<Blog> GetBlogs()
         {
-	        List<Blog> blogs = new List<Blog>();
+            try
+            {
+                using var sqlConnection = new SqlConnection(ConnectionString);
 
-	        Blog blog = new Blog();
-	        blog.Id = 2;
-	        blog.Title = "Sport";
-	        blog.Text = "Lorem";
-	        blog.CreatedDateTime = DateTime.Now;
+                sqlConnection.Open();
 
-	        Blog blog2 = new Blog();
-	        blog2.Id = 1;
-	        blog2.Title = "Hobby";
-	        blog2.Text = "Lorem";
-	        blog2.CreatedDateTime = DateTime.Now;
+                List<Blog> blogs = new List<Blog>();
 
-			blogs.Add(blog);
-			blogs.Add(blog2);
+                SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.Title, Blogs.Text, Blogs.Slug, Users.Username  FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id", sqlConnection);
 
-			return blogs;
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+						Blog blog = new Blog();
+                        blog.Id = reader.GetInt32(0);
+                        blog.Title = reader.GetString(1);
+                        blog.Text = reader.GetString(2);
+                        blog.Slug = reader.GetString(3);
+						blog.Author = reader.GetString(4);
+						blogs.Add(blog);
+                    }
+                }
+
+                cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
+
+                return blogs;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
 		}
     }
 }

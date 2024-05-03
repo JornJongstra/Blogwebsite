@@ -8,13 +8,26 @@ namespace BlogWebsite.Controllers
     {
         public IActionResult Index()
         {
+            BlogCoreManager blogCoreManager = new BlogCoreManager();
+            List<Blog> blogs = blogCoreManager.GetBlogs();
+            ViewBag.Blogs = blogs;
+
             return View("Index");
+        }
+        public IActionResult Detail(int id)
+        {
+            BlogCoreManager blogCoreManager = new BlogCoreManager();
+            Blog blog = blogCoreManager.GetBlog(id);
+            ViewBag.Blog = blog;
+
+            return View("Detail");
         }
 
         public IActionResult Create()
         {
-	        CategorieCoreManager categorieCoreManager = new CategorieCoreManager();
-	        List<Category> categories = categorieCoreManager.GetCategories();
+	        //CategorieCoreManager categorieCoreManager = new CategorieCoreManager();
+            CategoryCoreManager categoryCoreManager = new CategoryCoreManager();
+	        List<Category> categories = categoryCoreManager.GetCategories();
 	        ViewBag.MyList = categories;
             return View();
         }

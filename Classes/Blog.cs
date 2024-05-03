@@ -13,7 +13,8 @@ namespace Classes
 		public string Text { get; set; }
 		public string Slug { get; set; }
 		public int UserId { get; set; }
-		public DateTime CreatedDateTime { get; set; }
+        public string Author { get; set; }
+        public DateTime CreatedDateTime { get; set; }
 		public List<Category> Categories { get; set; }
 		public List<Comment> Comments { get; set; }
 		public List<Like> Likes { get; set; }

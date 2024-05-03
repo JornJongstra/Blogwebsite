@@ -27,7 +27,7 @@ namespace BlogWebsiteData
 
 		public List<Category> GetCategories()
 		{
-			return new CategorieDataManager().GetCategories();
+			return new CategoryDataManager().GetCategories();
 		}
 	}
 }

@@ -1,30 +1,27 @@
-﻿<body>
-    <div>
-        <nav>
-            <div class="btn btn-primary rounded-pill px-5 me-2">Home</div>
-            <div class="btn btn-primary rounded-pill px-5 me-2">Blogs</div>
-            <div class="btn btn-primary rounded-pill px-5 ms-auto">Login</div>
-        </nav>
+﻿@using Classes
+@using System.Collections
+
+<body>
+<div class="container-fluid">
+        <h1 class="text-center">Blogs</h1>
     </div>
 
-    <div class="container-fluid">
-        <h1 class="text-center">Blogs</h1>
-        <a class="btn btn-primary" asp-controller="Blog" asp-action="Create">New Blog</a>
-
-        <table>
-            <tr>
-                <th>Title</th>
-                <th>Author</th>
-            </tr>
-            <tr>
-                <td>Alfreds Futterkiste</td>
-                <td>Maria Anders</td>
-            </tr>
-            <tr>
-                <td>Centro comercial Moctezuma</td>
-                <td>Francisco Chang</td>
-            </tr>
-        </table>
+    <div class="container">
+        <div class="row g-2 row-cols-1 row-cols-md-1 row-cols-lg-2">
+            @foreach (var blog in ViewBag.Blogs)
+            {
+                <div class="col">
+                    <div class="card" style="height: 9rem;">
+                        <div class="card-title text-center">@blog.Title</div>
+                        <div class="card-body">hello</div>
+                        <div class="card-footer d-flex">
+                            <div class="">@blog.Author</div>
+                            <a class="ms-auto btn btn-primary rounded-pill" asp-controller="Blog" asp-action="Detail" asp-route-id="@blog.Id">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </body>
 
