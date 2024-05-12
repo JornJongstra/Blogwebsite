@@ -4,17 +4,17 @@
 	<form action="@Url.Action("UpdateBlog", "Blog")" method="post">
 		<div class="form-group row">
 			<label>Title:</label>
-			<input type="text" class="form-control" name="blogTitle" />
+			<input type="text" class="form-control" name="blogTitle" value="@ViewBag.Blog.Title"/>
 			<label>Category:</label>
-			<select name="blogCategories" id="blogCategories" multiple size="2">
-				@foreach (var category in ViewBag.MyList)
+			<select name="blogCategories" id="blogCategories" size="2">
+				@foreach (var category in ViewBag.Categories)
 				{
 					<option value="@category.Id">@category.Name</option>
 				}
 			</select>
 			<label>Text:</label>
-			<input type="text" class="form-control" name="blogText" />
+			<input type="text" class="form-control" name="blogText" value="@ViewBag.Blog.Text"/>
 		</div>
-		<input type="submit" value="Create" class="btn btn-primary" />
+		<input type="submit" value="Update" class="btn btn-primary" />
 	</form>
 </div>

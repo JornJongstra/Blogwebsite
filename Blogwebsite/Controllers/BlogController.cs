@@ -32,12 +32,26 @@ namespace BlogWebsite.Controllers
             return View();
         }
 
-        public IActionResult Update(int blogId)
+        public IActionResult Update(int id)
         {
             BlogCoreManager blogCoreManager = new BlogCoreManager();
-            var blog = blogCoreManager.GetBlog(blogId);
-            ViewBag.MyList = blog;
+            var blog = blogCoreManager.GetBlog(id);
+            ViewBag.Blog = blog;
+
+            CategoryCoreManager categoryCoreManager = new CategoryCoreManager();
+            var categories = categoryCoreManager.GetCategories();
+            ViewBag.Categories = categories;
+
             return View();
+        }
+        public IActionResult Delete(int id)
+        {
+            BlogCoreManager blogCoreManager = new BlogCoreManager();
+            if (blogCoreManager.DeleteBlog(id))
+            {
+                return RedirectToAction("Index", "Profile");
+            }
+            return RedirectToAction("Index", "Profile");
         }
 
         public IActionResult CreateBlog(string blogTitle, int[] blogCategories, string blogText)
@@ -61,6 +75,8 @@ namespace BlogWebsite.Controllers
 
             blog.Title = blogTitle;
             blog.Text = blogText;
+            blog.Slug = blogTitle.ToLower();
+            blog.UserId = 1;
             blog.CreatedDateTime = DateTime.Now;
             blog.Categories = new List<Category>();
 			for (int i = 0; i < blogCategories.Length; i++)

@@ -8,5 +8,20 @@ namespace BlogWebsite.Controllers
         {
             return View();
         }
+
+        public IActionResult Login(string email, string password)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return View("Index");
+            }
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                return View("Index");
+            }
+
+            return View("Index");
+            
+        }
     }
 }

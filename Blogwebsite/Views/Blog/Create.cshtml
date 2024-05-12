@@ -9,7 +9,7 @@
 			<label>Title:</label>
 			<input type="text" class="form-control" name="blogTitle" />
 			<label>Category:</label>
-			<select name="blogCategories" id="blogCategories" multiple size="2">
+			<select name="blogCategories" id="blogCategories" size="2">
 				@foreach (var category in ViewBag.MyList)
 				{
 					<option value="@category.Id">@category.Name</option>

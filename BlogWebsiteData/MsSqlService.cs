@@ -29,5 +29,15 @@ namespace BlogWebsiteData
 		{
 			return new CategoryDataManager().GetCategories();
 		}
-	}
+
+		public User GetUser(int id)
+		{
+			return new UserDataManager().GetUser(id);
+		}
+
+        public bool DeleteBlog(int id)
+        {
+            return new BlogDataManager().DeleteBlog(id);
+        }
+    }
 }

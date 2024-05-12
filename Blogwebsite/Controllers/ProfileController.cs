@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BlogWebsiteCore;
+using Classes;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlogWebsite.Controllers
 {
@@ -6,7 +8,9 @@ namespace BlogWebsite.Controllers
 	{
 		public IActionResult Index()
 		{
-			return View();
+			UserCoreManager userCoreManager = new UserCoreManager();
+			ViewBag.User = userCoreManager.GetUser(1);
+			return View("Index");
 		}
 	}
 }

@@ -30,6 +30,15 @@ namespace BlogWebsiteCore
 
 			return false;
 		}
+        public bool DeleteBlog(int id)
+        {
+            if (ServiceHandler.Service.DeleteBlog(id))
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         private bool ValidateBlog(Blog blog)
         {
