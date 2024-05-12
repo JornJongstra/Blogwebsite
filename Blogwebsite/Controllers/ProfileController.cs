@@ -9,7 +9,8 @@ namespace BlogWebsite.Controllers
 		public IActionResult Index()
 		{
 			UserCoreManager userCoreManager = new UserCoreManager();
-			ViewBag.User = userCoreManager.GetUser(1);
+			int sessionUserId = Convert.ToInt32(HttpContext.Session.GetInt32(SessionVariables.SessionKeyUserId));
+			ViewBag.User = userCoreManager.GetUser(sessionUserId);
 			return View("Index");
 		}
 	}

@@ -1,17 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
+using System.Security.Cryptography;
+using Classes;
 
 namespace BlogWebsiteCore
 {
     public class AuthCoreManager
     {
-        public bool LoginCheck(string username, string password)
+        public User LoginCheck(string email, string password)
         {
-
-            return true;
+			string hashedPassword = ComputeSha256Hash(password);
+			var storedUser = ServiceHandler.Service.GetUserByEmail(email);
+			if (storedUser.Password == hashedPassword)
+			{
+				return storedUser;
+			}
+            return null;
         }
-    }
+
+		public bool RegisterUser(User user)
+		{
+			user.Password = ComputeSha256Hash(user.Password);
+			if (ServiceHandler.Service.CreateUser(user))
+			{
+				return true;
+			}
+			return false;
+		}
+
+		static string ComputeSha256Hash(string rawData)
+		{
+			// Create a SHA256
+			using (SHA256 sha256Hash = SHA256.Create())
+			{
+				// ComputeHash - returns byte array
+				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+				// Convert byte array to a string
+				StringBuilder builder = new StringBuilder();
+				for (int i = 0; i < bytes.Length; i++)
+				{
+					builder.Append(bytes[i].ToString("x2"));
+				}
+				return builder.ToString();
+			}
+		}
+	}
 }

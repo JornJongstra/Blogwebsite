@@ -1,4 +1,6 @@
 using Blogwebsite.Models;
+using BlogWebsite;
+using BlogWebsite.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -15,6 +17,9 @@ namespace Blogwebsite.Controllers
 
         public IActionResult Index()
         {
+            //SessionController sessionController = new SessionController();
+            ViewBag.username = HttpContext.Session.GetString(SessionVariables.SessionKeyUsername);
+
             return View();
         }
 

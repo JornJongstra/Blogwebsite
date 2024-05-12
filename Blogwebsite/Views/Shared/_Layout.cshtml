@@ -30,9 +30,17 @@
                             <a class="btn btn-primary rounded-pill px-5 me-2" asp-controller="Profile" asp-action="Index">Profile</a>
                         </li>
                     </ul>
-                    <div>
-                        <a class="btn btn-primary rounded-pill px-5 me-2" asp-controller="Auth" asp-action="Index">Login</a>
-                    </div>
+                    @if(ViewBag.username == null)
+                    {
+                        <div>
+                            <a class="btn btn-primary rounded-pill px-5 me-2" asp-controller="Auth" asp-action="Index">Login</a>
+                        </div>
+                    } else
+                    {
+                        <div>
+                            <a class="btn btn-primary rounded-pill px-5 me-2" asp-controller="Auth" asp-action="Logout">Logout</a>
+                        </div>
+                    }
                 </div>
             </div>
         </nav>

@@ -1,0 +1,24 @@
+﻿<body>
+    <div class="container-fluid">
+        <h1 class="text-center">Login</h1>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <form action="@Url.Action("RegisterUser", "Auth")" method="post">
+                <div class="col"></div>
+                <div class="card text-center col-auto">
+                    <div class="card-body">
+                        <div class="row ">
+                            <input class="mb-2" placeholder="Username" name="username" />
+                            <input class="mb-2" placeholder="Email" name="email" />
+                            <input class="mb-3" placeholder="Password" name="password" />
+                            <button class="btn btn-primary rounded-pill px-5" type="submit">Login</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col"></div>
+            </form>
+        </div>
+    </div>
+</body>

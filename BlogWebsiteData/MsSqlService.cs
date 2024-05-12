@@ -39,5 +39,15 @@ namespace BlogWebsiteData
         {
             return new BlogDataManager().DeleteBlog(id);
         }
+
+		public User GetUserByEmail(string email)
+		{
+			return new UserDataManager().GetUserByEmail(email);
+		}
+
+		public bool CreateUser(User user)
+		{
+			return new UserDataManager().CreateUser(user);
+		}
     }
 }

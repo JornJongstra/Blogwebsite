@@ -76,7 +76,7 @@ namespace BlogWebsite.Controllers
             blog.Title = blogTitle;
             blog.Text = blogText;
             blog.Slug = blogTitle.ToLower();
-            blog.UserId = 1;
+            blog.UserId = Convert.ToInt32(HttpContext.Session.GetInt32(SessionVariables.SessionKeyUserId));
             blog.CreatedDateTime = DateTime.Now;
             blog.Categories = new List<Category>();
 			for (int i = 0; i < blogCategories.Length; i++)

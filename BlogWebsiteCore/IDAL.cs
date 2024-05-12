@@ -11,5 +11,7 @@ namespace BlogWebsiteCore
 		public Boolean DeleteBlog(int id);
 		public List<Category> GetCategories();
 		public User GetUser(int id);
+		public User GetUserByEmail(string email);
+		public bool CreateUser(User user);
 	}
 }
