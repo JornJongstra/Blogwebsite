@@ -26,9 +26,12 @@
                         <li class="nav-item">
                             <a class="btn btn-primary rounded-pill px-5 me-2" asp-controller="Blog" asp-action="Index">Blogs</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="btn btn-primary rounded-pill px-5 me-2" asp-controller="Profile" asp-action="Index">Profile</a>
-                        </li>
+                        @if(ViewBag.username != null)
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-primary rounded-pill px-5 me-2" asp-controller="Profile" asp-action="Index">Profile</a>
+                            </li>
+                        }
                     </ul>
                     @if(ViewBag.username == null)
                     {

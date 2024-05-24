@@ -10,21 +10,35 @@ namespace BlogWebsite.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+			AuthUser authController = new AuthUser(HttpContext);
+			if (!authController.IsNotAuthenticated()) return NotFound();
+
+			ViewBag.username = HttpContext.Session.GetString(SessionVariables.SessionKeyUsername);
+			return View();
         }
         public IActionResult Register()
         {
-            return View();
+			AuthUser authController = new AuthUser(HttpContext);
+			if (!authController.IsNotAuthenticated()) return NotFound();
+
+			ViewBag.username = HttpContext.Session.GetString(SessionVariables.SessionKeyUsername);
+			return View();
         }
 		public IActionResult Logout()
 		{
+			AuthUser authController = new AuthUser(HttpContext);
+			if (!authController.IsAuthenticated()) return NotFound();
+
 			HttpContext.Session.Clear();
 
             return RedirectToAction("Index", "Home");
         }
         public IActionResult Login(string email, string password)
         {
-            if (string.IsNullOrWhiteSpace(email))
+			AuthUser authController = new AuthUser(HttpContext);
+			if (!authController.IsNotAuthenticated()) return NotFound();
+
+			if (string.IsNullOrWhiteSpace(email))
             {
                 return RedirectToAction("Index");
 			}
@@ -51,6 +65,9 @@ namespace BlogWebsite.Controllers
         }
         public IActionResult RegisterUser(string username ,string email, string password) 
         {
+			AuthUser authController = new AuthUser(HttpContext);
+			if (!authController.IsNotAuthenticated()) return NotFound();
+
 			if (string.IsNullOrWhiteSpace(email))
 			{
 				return RedirectToAction("Register");

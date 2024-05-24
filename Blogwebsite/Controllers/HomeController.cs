@@ -17,9 +17,9 @@ namespace Blogwebsite.Controllers
 
         public IActionResult Index()
         {
-            //SessionController sessionController = new SessionController();
+            //SessionController sessionController = new SessionController(HttpContext);
             ViewBag.username = HttpContext.Session.GetString(SessionVariables.SessionKeyUsername);
-
+            //ViewBag.session = sessionController.GetSessionInfo();
             return View();
         }
 

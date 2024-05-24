@@ -9,11 +9,18 @@
 			<select name="blogCategories" id="blogCategories" size="2">
 				@foreach (var category in ViewBag.Categories)
 				{
-					<option value="@category.Id">@category.Name</option>
+						@if (ViewBag.BlogCategories[0].Name == category.Name)
+						{
+						<option selected value="@category.Id">@category.Name</option>
+					} else
+					{
+						<option value="@category.Id">@category.Name</option>
+					}
 				}
 			</select>
 			<label>Text:</label>
 			<input type="text" class="form-control" name="blogText" value="@ViewBag.Blog.Text"/>
+			<input type="text" class="form-control" name="blogId" value="@ViewBag.Blog.Id" hidden/>
 		</div>
 		<input type="submit" value="Update" class="btn btn-primary" />
 	</form>

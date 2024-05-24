@@ -33,12 +33,14 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseSession();
+//app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 BlogWebsiteCore.ServiceHandler.SetService(new BlogWebsiteData.MsSqlService());
+
+app.UseSession();
 
 app.Run();
