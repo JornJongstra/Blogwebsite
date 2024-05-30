@@ -47,6 +47,7 @@ namespace BlogWebsiteCore
             if (string.IsNullOrWhiteSpace(blog.Text)) return false;
             if (string.IsNullOrEmpty(blog.UserId.ToString())) return false;
             if (string.IsNullOrWhiteSpace(blog.CreatedDateTime.ToString())) return false;
+            if (blog.Categories.Count == 0) return false;
             
             return true;
         }

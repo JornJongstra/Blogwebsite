@@ -19,7 +19,9 @@ namespace BlogWebsiteCore
 
 		public bool RegisterUser(User user)
 		{
+			if (!RegisterInputCheck(user)) return false;
 			user.Password = ComputeSha256Hash(user.Password);
+
 			if (ServiceHandler.Service.CreateUser(user))
 			{
 				return true;
@@ -43,6 +45,13 @@ namespace BlogWebsiteCore
 				}
 				return builder.ToString();
 			}
+		}
+		private bool RegisterInputCheck(User user)
+		{
+			if (string.IsNullOrWhiteSpace(user.Username)) return false;
+			if (string.IsNullOrWhiteSpace(user.Email)) return false;
+			if (string.IsNullOrWhiteSpace(user.Password)) return false;
+			return true;
 		}
 	}
 }
