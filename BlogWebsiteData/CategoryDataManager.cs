@@ -30,9 +30,7 @@ namespace BlogWebsiteData
 							var CategorieId = Convert.ToInt32(reader["Id"]);
 							var CategorieName = Convert.ToString(reader["Name"]);
 
-							Category category = new Category();
-							category.Id = CategorieId;
-							category.Name = CategorieName;
+							Category category = new Category(CategorieId, CategorieName);
 							categories.Add(category);
 						}
 					}

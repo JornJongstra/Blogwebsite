@@ -21,21 +21,25 @@ namespace BlogWebsiteData
 
                 sqlConnection.Open();
 
-                User user = new User();
-
                 SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[Users] WHERE Users.Id = @Id;", sqlConnection);
 
                 cmd.Parameters.Add("@Id", SqlDbType.Int);
                 cmd.Parameters["@Id"].Value = id;
 
+				int userId = 0;
+				string username = "";
+				string email = "";
+				string password = "";
+
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
-                        user.Id = reader.GetInt32(0);
-                        user.Username = reader.GetString(1);
-                        user.Email = reader.GetString(2);
-                        user.Password = reader.GetString(3);
+                        //User user = new User(reader.GetInt32(0), reader.GetString(1), reader.GetString(3), reader.GetString(2));
+                        userId = reader.GetInt32(0);
+                        username = reader.GetString(1);
+                        email = reader.GetString(2);
+                        password = reader.GetString(3);
                     }
                 }
 
@@ -44,7 +48,9 @@ namespace BlogWebsiteData
                 sqlConnection.Close();
 
                 BlogDataManager blogDataManager = new BlogDataManager();
-                user.Blogs = blogDataManager.GetBlogsFromUser(id);
+                List<Blog> blogs = blogDataManager.GetBlogsFromUser(id);
+
+                User user = new User(userId, username, password, email, blogs);
 
                 return user;
             }
@@ -60,30 +66,35 @@ namespace BlogWebsiteData
 				using var sqlConnection = new SqlConnection(ConnectionString);
 
 				sqlConnection.Open();
-
-				User user = new User();
-
+								
 				SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[Users] WHERE Users.Email = @Email;", sqlConnection);
 
 				cmd.Parameters.Add("@Email", SqlDbType.NVarChar);
 				cmd.Parameters["@Email"].Value = email;
 
+				int userId = 0;
+				string username = "";
+				string userEmail = "";
+				string password = "";
+
 				using (SqlDataReader reader = cmd.ExecuteReader())
 				{
 					if (reader.Read())
 					{
-						user.Id = reader.GetInt32(0);
-						user.Username = reader.GetString(1);
-						user.Email = reader.GetString(2);
-						user.Password = reader.GetString(3);
-					}
+						userId = reader.GetInt32(0);
+						username = reader.GetString(1);
+						userEmail = reader.GetString(2);
+						password = reader.GetString(3);
+                    }
 				}
 
 				cmd.ExecuteNonQuery();
 
 				sqlConnection.Close();
 
-				return user;
+                User user = new User(userId, username, password, email);
+
+                return user;
 			}
 			catch (Exception)
 			{

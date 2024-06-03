@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Security.Cryptography;
 using Classes;
+using System.Text.RegularExpressions;
 
 namespace BlogWebsiteCore
 {
@@ -9,7 +10,13 @@ namespace BlogWebsiteCore
         public User LoginCheck(string email, string password)
         {
 			string hashedPassword = ComputeSha256Hash(password);
-			var storedUser = ServiceHandler.Service.GetUserByEmail(email);
+
+            if (string.IsNullOrWhiteSpace(email)) return null;
+            if (string.IsNullOrWhiteSpace(password)) return null;
+            string regexEmail = @"^[^@\s]+@[^@\s]+.(com|net|org|gov|nl)$";
+            if (!Regex.IsMatch(email, regexEmail)) return null;
+
+            var storedUser = ServiceHandler.Service.GetUserByEmail(email);
 			if (storedUser.Password == hashedPassword)
 			{
 				return storedUser;
@@ -20,7 +27,7 @@ namespace BlogWebsiteCore
 		public bool RegisterUser(User user)
 		{
 			if (!RegisterInputCheck(user)) return false;
-			user.Password = ComputeSha256Hash(user.Password);
+			user.SetPassword(ComputeSha256Hash(user.Password));
 
 			if (ServiceHandler.Service.CreateUser(user))
 			{
@@ -51,7 +58,13 @@ namespace BlogWebsiteCore
 			if (string.IsNullOrWhiteSpace(user.Username)) return false;
 			if (string.IsNullOrWhiteSpace(user.Email)) return false;
 			if (string.IsNullOrWhiteSpace(user.Password)) return false;
-			return true;
+
+            if (!Regex.IsMatch(user.Username, @"^[a-zA-Z0-9]+$")) return false;
+            string regexEmail = @"^[^@\s]+@[^@\s]+.(com|net|org|gov|nl)$";
+            if (!Regex.IsMatch(user.Email, regexEmail)) return false;
+            if (user.Password.Length < 6) return false;
+
+            return true;
 		}
-	}
+    }
 }

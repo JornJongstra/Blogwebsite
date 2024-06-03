@@ -82,10 +82,7 @@ namespace BlogWebsite.Controllers
 			}
 			
 			AuthCoreManager authCoreManager= new AuthCoreManager();
-			User user = new User();
-			user.Email = email;
-			user.Password = password;
-			user.Username = username;
+			User user = new User(username, password, email);
 
 			if (authCoreManager.RegisterUser(user))
 			{

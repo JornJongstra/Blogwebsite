@@ -6,142 +6,149 @@ namespace TestBlogWebsiteCore
 	[TestClass]
 	public class BlogCoreManagerUnitTests
 	{
-        [TestMethod]
-        public void CreateUser_WithValidData_UserCreated()
+        public BlogCoreManagerUnitTests() 
         {
-			User user = new User();
+            BlogWebsiteCore.ServiceHandler.SetService(new DataTestService());
+        }
 
-			user.Username = "Test";
-			user.Email = "Test@gmail.com";
-			user.Password = "Test123";
+        [TestMethod]
+        public void TC01_CreateUser_WithValidDate_UserCreated()
+        {
+            User user = new User("jornj", "wachtwoord", "jorn.jongstra@kpnmail.nl");
 
-			AuthCoreManager authCoreManager = new AuthCoreManager();
-			bool result = authCoreManager.RegisterUser(user);
+            bool result = new AuthCoreManager().RegisterUser(user);
             Assert.AreEqual(true, result);
         }
 
         [TestMethod]
-        public void CreateUser_WithNotValidData_NoUsername_UserCreated()
+        public void TC02_CreateUser_WithNotValidDate_UserCreated()
         {
-            User user = new User();
+            User user = new User("_+jorn", "password", "jorn.jongstra@kpnmail.nl");
 
-            user.Username = "";
-            user.Email = "Test@gmail.com";
-            user.Password = "Test123";
-
-            AuthCoreManager authCoreManager = new AuthCoreManager();
-            bool result = authCoreManager.RegisterUser(user);
+            bool result = new AuthCoreManager().RegisterUser(user);
             Assert.AreEqual(false, result);
         }
 
         [TestMethod]
-        public void CreateUser_WithNotValidData_NoEmail_UserCreated()
+        public void TC03_CreateUser_WithNotValidDate_UserCreated()
         {
-            User user = new User();
+            User user = new User("jornj", "password", "jornjongstrakpnmailnl");
 
-            user.Username = "Test";
-            user.Email = "";
-            user.Password = "Test123";
-
-            AuthCoreManager authCoreManager = new AuthCoreManager();
-            bool result = authCoreManager.RegisterUser(user);
+            bool result = new AuthCoreManager().RegisterUser(user);
             Assert.AreEqual(false, result);
         }
 
         [TestMethod]
-        public void CreateUser_WithNotValidData_NoPassword_UserCreated()
+        public void TC04_CreateUser_WithNotValidDate_UserCreated()
         {
-            User user = new User();
+            User user = new User("", "password", "jornjongstrakpnmailnl");
 
-            user.Username = "Test";
-            user.Email = "Test@gmail.com";
-            user.Password = "";
-
-            AuthCoreManager authCoreManager = new AuthCoreManager();
-            bool result = authCoreManager.RegisterUser(user);
+            bool result = new AuthCoreManager().RegisterUser(user);
             Assert.AreEqual(false, result);
         }
 
+        [TestMethod]
+        public void TC05_CreateUser_WithNotValidDate_UserCreated()
+        {
+            User user = new User("jornj", "asdf", "jornjongstrakpnmailnl");
+
+            bool result = new AuthCoreManager().RegisterUser(user);
+            Assert.AreEqual(false, result);
+        }
 
         [TestMethod]
-		public void CreateBlog_WithValidData_BlogCreated()
-		{
-			Blog blog = new Blog();
-			BlogCoreManager blogCoreManager = new BlogCoreManager();
-			blog.Title = "Eindhoven Sport";
-			blog.Text = "Lorem";
-			blog.CreatedDateTime = DateTime.Now;
-			blog.Slug = "eindhoven-sport";
-			blog.Categories = new List<Category>();
-			Category category = new Category();
-			category.Name = "Sport";
-			category.Id = 1;
-			blog.Categories.Add(category);
-			blog.UserId = 1;
+        public void TC06_LoginUser_WithValidDate_UserLogin()
+        {
+            User user = new User("jorn.jongstra@kpnmail.nl", "password");
 
-			bool result = blogCoreManager.CreateBlog(blog);
-			Assert.AreEqual(true, result);
-		}
+            User result = new AuthCoreManager().LoginCheck(user.Email, user.Password);
+            //Assert.AreSame("jorn.jongstra@kpnmail.nl", result.Email);
+            Assert.IsNotNull(result);
+        }
 
-		[TestMethod]
-		public void CreateBlog_WithNotValidData_BlogCreated()
-		{
-            Blog blog = new Blog();
+        [TestMethod]
+        public void TC07_LoginUser_WithNotValidDate_UserLogin()
+        {
+            User user = new User("jorn.jongstra@kpnmail.nl", "");
+
+            User result = new AuthCoreManager().LoginCheck(user.Email, user.Password);
+            //Assert.AreSame("jorn.jongstra@kpnmail.nl", result.Email);
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void TC08_LoginUser_WithNotValidDate_UserLogin()
+        {
+            User user = new User("jornjongstrakpnmailnl", "password");
+
+            User result = new AuthCoreManager().LoginCheck(user.Email, user.Password);
+            //Assert.AreSame("jorn.jongstra@kpnmail.nl", result.Email);
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void TC11_CreateBlog_WithValidData_BlogCreated()
+        {
             BlogCoreManager blogCoreManager = new BlogCoreManager();
-            blog.Title = "";
-            blog.Text = "";
-            blog.CreatedDateTime = DateTime.Now;
-            blog.Slug = "eindhoven-sport";
-            blog.Categories = new List<Category>();
-            Category category = new Category();
-            category.Name = "Sport";
-            category.Id = 1;
-            blog.Categories.Add(category);
-            blog.UserId = 1;
+
+            List<Category> categories = new List<Category>();
+            Category category = new Category(1, "test");
+            categories.Add(category);
+
+            Blog blog = new Blog("Eindhoven Sport", "Lorem", "eindhoven-sport", 1, DateTime.Now, categories);
 
             bool result = blogCoreManager.CreateBlog(blog);
-			Assert.AreEqual(false, result);
-		}
+            Assert.AreEqual(true, result);
+        }
 
         [TestMethod]
-        public void UpdateBlog_WithNotValidData_BlogUpdated()
+        public void TC12_CreateBlog_WithNotValidData_BlogCreated()
         {
-            Blog blog = new Blog();
             BlogCoreManager blogCoreManager = new BlogCoreManager();
-            blog.Title = "";
-            blog.Text = "";
-            blog.Id = 1;
-            blog.CreatedDateTime = DateTime.Now;
-            blog.Slug = "eindhoven-sport";
-            blog.Categories = new List<Category>();
-            Category category = new Category();
-            category.Name = "Sport";
-            category.Id = 1;
-            blog.Categories.Add(category);
-            blog.UserId = 1;
+
+            List<Category> categories = new List<Category>();
+
+            Blog blog = new Blog("Zondag voetbal", "Lorem", "eindhoven-sport", 1, DateTime.Now, categories);
+
+            bool result = blogCoreManager.CreateBlog(blog);
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
+        public void TC15_UpdateBlog_WithValidData_BlogUpdated()
+        {
+            BlogCoreManager blogCoreManager = new BlogCoreManager();
+
+            List<Category> categories = new List<Category>();
+            Category category = new Category(1, "test");
+            categories.Add(category);
+
+
+            Blog blog = new Blog("Eindhoven Sport", "Lorem", "eindhoven-sport", 1 , DateTime.Now, categories);
+
+            bool result = blogCoreManager.UpdateBlog(blog);
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void TC16_UpdateBlog_WithNotValidData_BlogUpdated()
+        {
+            BlogCoreManager blogCoreManager = new BlogCoreManager();
+
+            List<Category> categories = new List<Category>();
+            Category category = new Category(1, "test");
+            categories.Add(category);
+
+            Blog blog = new Blog("Eindhoven Sport", "", "eindhoven-sport", 1, DateTime.Now, categories);
 
             bool result = blogCoreManager.UpdateBlog(blog);
             Assert.AreEqual(false, result);
         }
 
         [TestMethod]
-        public void UpdateBlog_WithValidData_BlogUpdated()
+        public void TC18_DeleteBlog_WithValidData_BlogDeleted()
         {
-            Blog blog = new Blog();
-            BlogCoreManager blogCoreManager = new BlogCoreManager();
-            blog.Title = "Sport";
-            blog.Text = "Lorem";
-            blog.Id = 1;
-            blog.CreatedDateTime = DateTime.Now;
-            blog.Slug = "eindhoven-sport";
-            blog.Categories = new List<Category>();
-            Category category = new Category();
-            category.Name = "Sport";
-            category.Id = 1;
-            blog.Categories.Add(category);
-            blog.UserId = 1;
-
-            bool result = blogCoreManager.UpdateBlog(blog);
+            bool result = new BlogCoreManager().DeleteBlog(5);
             Assert.AreEqual(true, result);
         }
 

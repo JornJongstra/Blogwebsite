@@ -90,23 +90,30 @@ namespace BlogWebsite.Controllers
 	            return RedirectToAction("Create");
             }
 
-			Blog blog = new Blog();
+            string title = "";
+            string text = "";
+            string slug = "";
+            int userId = 0;
+            DateTime createdDateTime = DateTime.Now;
+            List<Category> categories = new List<Category>();
+
             
             BlogCoreManager blogCoreManager = new BlogCoreManager();
 
-            blog.Title = blogTitle;
-            blog.Text = blogText;
-            blog.Slug = blogTitle.ToLower();
-            blog.UserId = Convert.ToInt32(HttpContext.Session.GetInt32(SessionVariables.SessionKeyUserId));
-            blog.CreatedDateTime = DateTime.Now;
-            blog.Categories = new List<Category>();
+            title = blogTitle;
+            text = blogText;
+            slug = blogTitle.ToLower();
+            userId = Convert.ToInt32(HttpContext.Session.GetInt32(SessionVariables.SessionKeyUserId));
+            createdDateTime = DateTime.Now;
+            categories = new List<Category>();
 
 			for (int i = 0; i < blogCategories.Length; i++)
             {
-	            Category category = new Category();
-	            category.Id = blogCategories[i];
-                blog.Categories.Add(category);
+	            Category category = new Category(blogCategories[i]);
+                categories.Add(category);
             }
+
+            Blog blog = new Blog(title, text, slug, userId, createdDateTime, categories);
 
             if (blogCoreManager.CreateBlog(blog))
             {
@@ -135,24 +142,31 @@ namespace BlogWebsite.Controllers
 				return RedirectToAction("Update", blogId);
 			}
 
-			Blog blog = new Blog();
+            int id = 0;
+            string title = "";
+            string text = "";
+            string slug = "";
+            int userId = 0;
+            DateTime createdDateTime = DateTime.Now;
+            List<Category> categories = new List<Category>();
 
-			BlogCoreManager blogCoreManager = new BlogCoreManager();
+            BlogCoreManager blogCoreManager = new BlogCoreManager();
 
-			blog.Title = blogTitle;
-			blog.Id = blogId;
-			blog.Text = blogText;
-			blog.Slug = blogTitle.ToLower();
-			blog.UserId = Convert.ToInt32(HttpContext.Session.GetInt32(SessionVariables.SessionKeyUserId));
-			blog.CreatedDateTime = DateTime.Now;
-			blog.Categories = new List<Category>();
+			title = blogTitle;
+			id = blogId;
+			text = blogText;
+			slug = blogTitle.ToLower();
+			userId = Convert.ToInt32(HttpContext.Session.GetInt32(SessionVariables.SessionKeyUserId));
+			createdDateTime = DateTime.Now;
+			categories = new List<Category>();
 
 			for (int i = 0; i < blogCategories.Length; i++)
 			{
-				Category category = new Category();
-				category.Id = blogCategories[i];
-				blog.Categories.Add(category);
+				Category category = new Category(blogCategories[i]);
+				categories.Add(category);
 			}
+
+            Blog blog = new Blog(id, title, text, slug, userId, createdDateTime, categories);
 
 			if (blogCoreManager.UpdateBlog(blog))
 			{

@@ -121,9 +121,16 @@ namespace BlogWebsiteData
 
                 sqlConnection.Open();
 
-                Blog blog = new Blog();
+                int blogId = 0;
+                int userId = 0;
+                string title = "";
+                string text = "";
+                string author = "";
+                List<Category> categories = new List<Category>();
 
-		        SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.User_id, Blogs.Title, Blogs.Text, Users.Username FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id WHERE Blogs.Id = @Id;", sqlConnection);
+                //SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.User_id, Blogs.Title, Blogs.Text, Users.Username, Categories.Id, Categories.Name FROM[dbo].[Blogs] INNER JOIN[dbo].[Users] ON Blogs.User_id = Users.Id INNER JOIN[dbo].[BlogCategories] ON BlogCategories.Blog_id = Blogs.Id INNER JOIN[dbo].[Categories] ON Categories.Id = BlogCategories.Categorie_id WHERE Blogs.User_id = @UserId", sqlConnection);
+
+                SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.User_id, Blogs.Title, Blogs.Text, Users.Username FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id WHERE Blogs.Id = @Id;", sqlConnection);
 
 				cmd.Parameters.Add("@Id", SqlDbType.Int);
 				cmd.Parameters["@Id"].Value = id;
@@ -134,11 +141,11 @@ namespace BlogWebsiteData
                 {
 	                while (reader.Read())
 	                {
-		                blog.Id = reader.GetInt32(0);
-                        blog.UserId = reader.GetInt32(1);
-				        blog.Title = reader.GetString(2);
-				        blog.Text = reader.GetString(3);
-				        blog.Author = reader.GetString(4);
+		                blogId = reader.GetInt32(0);
+                        userId = reader.GetInt32(1);
+				        title = reader.GetString(2);
+				        text = reader.GetString(3);
+				        author = reader.GetString(4);
 			        }
                 }
 
@@ -147,26 +154,23 @@ namespace BlogWebsiteData
                 SqlCommand cmd2 = new SqlCommand("SELECT Categories.Id, Categories.Name FROM [dbo].[BlogCategories] INNER JOIN [dbo].[Categories] ON BlogCategories.Categorie_id = Categories.Id WHERE BlogCategories.Blog_id = @Blog_id", sqlConnection);
 
 				cmd2.Parameters.Add("@Blog_id", SqlDbType.Int);
-				cmd2.Parameters["@Blog_id"].Value = blog.Id;
-
-                List<Category> categories = new List<Category>();
+				cmd2.Parameters["@Blog_id"].Value = id;
 
 				using (SqlDataReader reader = cmd2.ExecuteReader())
 				{
 					while (reader.Read())
 					{
-                        Category category = new Category();
-                        category.Id = reader.GetInt32(0);
-                        category.Name = reader.GetString(1);
+                        Category category = new Category(reader.GetInt32(0), reader.GetString(1));
                         categories.Add(category);
 					}
 				}
 
-                blog.Categories = categories;
-
+                
 				cmd2.ExecuteNonQuery();
+                Blog blog = new Blog(blogId, title, text, userId, author, categories);
 
-				sqlConnection.Close();
+                sqlConnection.Close();
+                //Blog blog = new Blog(blogId, title, text, userId, author, categories);
 
                 return blog;
 	        }
@@ -186,6 +190,13 @@ namespace BlogWebsiteData
 
                 List<Blog> blogs = new List<Blog>();
 
+                //int blogId = 0;
+                //int userId = 0;
+                //string title = "";
+                //string text = "";
+                //string author = "";
+                //string slug = "";
+
                 SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.Title, Blogs.Text, Blogs.Slug, Users.Username, Categories.Id, Categories.Name FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id INNER JOIN [dbo].[BlogCategories] ON BlogCategories.Blog_id = Blogs.Id INNER JOIN [dbo].[Categories] ON Categories.Id = BlogCategories.Categorie_id WHERE Blogs.User_id = @UserId", sqlConnection);
 
                 cmd.Parameters.Add("@UserId", SqlDbType.Int);
@@ -195,18 +206,17 @@ namespace BlogWebsiteData
                 {
                     while (reader.Read())
                     {
-                        Blog blog = new Blog();
-                        blog.Id = reader.GetInt32(0);
-                        blog.Title = reader.GetString(1);
-                        blog.Text = reader.GetString(2);
-                        blog.Slug = reader.GetString(3);
-                        blog.Author = reader.GetString(4);
+                        int blogId = reader.GetInt32(0);
+                        string title = reader.GetString(1);
+                        string text = reader.GetString(2);
+                        string slug = reader.GetString(3);
+                        string author = reader.GetString(4);
 						List<Category> categories = new List<Category>();
-						Category category = new Category();
-                        category.Id = reader.GetInt32(5);
-                        category.Name = reader.GetString(6);
+						Category category = new Category(reader.GetInt32(5), reader.GetString(6));
                         categories.Add(category);
-                        blog.Categories = categories;
+
+                        Blog blog = new Blog(blogId, title, text, id, author, categories);
+                        
                         blogs.Add(blog);
                     }
                 }
@@ -232,19 +242,26 @@ namespace BlogWebsiteData
 
                 List<Blog> blogs = new List<Blog>();
 
+                //int blogId = 0;
+                //int userId = 0;
+                //string title = "";
+                //string text = "";
+                //string author = "";
+                //string slug = "";
+
                 SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.Title, Blogs.Text, Blogs.Slug, Users.Username  FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id", sqlConnection);
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-						Blog blog = new Blog();
-                        blog.Id = reader.GetInt32(0);
-                        blog.Title = reader.GetString(1);
-                        blog.Text = reader.GetString(2);
-                        blog.Slug = reader.GetString(3);
-						blog.Author = reader.GetString(4);
-						blogs.Add(blog);
+                        int blogId = reader.GetInt32(0);
+                        string title = reader.GetString(1);
+                        string text = reader.GetString(2);
+                        string slug = reader.GetString(3);
+						string author = reader.GetString(4);
+                        Blog blog = new Blog(blogId, title, text,slug, author);
+                        blogs.Add(blog);
                     }
                 }
 
