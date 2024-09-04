@@ -1,7 +1,5 @@
 ﻿using BlogWebsiteCore;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-using System.Text;
 using Classes;
 
 namespace BlogWebsite.Controllers
@@ -10,7 +8,7 @@ namespace BlogWebsite.Controllers
     {
         public IActionResult Index()
         {
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsNotAuthenticated()) return NotFound();
 
 			ViewBag.username = HttpContext.Session.GetString(SessionVariables.SessionKeyUsername);
@@ -18,7 +16,7 @@ namespace BlogWebsite.Controllers
         }
         public IActionResult Register()
         {
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsNotAuthenticated()) return NotFound();
 
 			ViewBag.username = HttpContext.Session.GetString(SessionVariables.SessionKeyUsername);
@@ -26,7 +24,7 @@ namespace BlogWebsite.Controllers
         }
 		public IActionResult Logout()
 		{
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsAuthenticated()) return NotFound();
 
 			HttpContext.Session.Clear();
@@ -35,7 +33,7 @@ namespace BlogWebsite.Controllers
         }
         public IActionResult Login(string email, string password)
         {
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsNotAuthenticated()) return NotFound();
 
 			if (string.IsNullOrWhiteSpace(email))
@@ -47,25 +45,19 @@ namespace BlogWebsite.Controllers
                 return RedirectToAction("Index");
 			}
 
-            AuthCoreManager authCoreManager = new AuthCoreManager();
+            var authCoreManager = new AuthCoreManager();
 
             var user = authCoreManager.LoginCheck(email, password);
 
-			if (user != null)
-			{
-				HttpContext.Session.SetString(SessionVariables.SessionKeyUsername, user.Username);
-				HttpContext.Session.SetString(SessionVariables.SessionKeySessionId, Guid.NewGuid().ToString());
-				HttpContext.Session.SetInt32(SessionVariables.SessionKeyUserId, user.Id);
+            HttpContext.Session.SetString(SessionVariables.SessionKeyUsername, user.Username);
+            HttpContext.Session.SetString(SessionVariables.SessionKeySessionId, Guid.NewGuid().ToString());
+            HttpContext.Session.SetInt32(SessionVariables.SessionKeyUserId, user.Id);
 
-				return RedirectToAction("Index", "Home");
-			} else
-			{
-				return RedirectToAction("Index");
-			}
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult RegisterUser(string username ,string email, string password) 
         {
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsNotAuthenticated()) return NotFound();
 
 			if (string.IsNullOrWhiteSpace(email))
@@ -81,8 +73,8 @@ namespace BlogWebsite.Controllers
 				return RedirectToAction("Register");
 			}
 			
-			AuthCoreManager authCoreManager= new AuthCoreManager();
-			User user = new User(username, password, email);
+			var authCoreManager= new AuthCoreManager();
+			var user = new User(username, password, email);
 
 			if (authCoreManager.RegisterUser(user))
 			{

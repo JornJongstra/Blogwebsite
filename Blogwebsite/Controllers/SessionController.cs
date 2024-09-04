@@ -1,8 +1,4 @@
-﻿using Classes;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace BlogWebsite.Controllers
+﻿namespace BlogWebsite.Controllers
 {
     public class SessionController(HttpContext httpContext)
     {

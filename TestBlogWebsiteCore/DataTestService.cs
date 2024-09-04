@@ -1,10 +1,5 @@
 ﻿using BlogWebsiteCore;
 using Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestBlogWebsiteCore
 {
@@ -27,7 +22,7 @@ namespace TestBlogWebsiteCore
 
         public Blog GetBlog(int id)
         {
-            Blog blog = new Blog(10, "Title", "Text");
+            var blog = new Blog(10, "Title", "Text");
 
             return blog;
         }
@@ -49,7 +44,7 @@ namespace TestBlogWebsiteCore
 
         public User GetUserByEmail(string email)
         {
-            User user = new User("jorn.jongstra@kpnmail.nl", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8");
+            var user = new User("jorn.jongstra@kpnmail.nl", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8");
 
             return user;
         }

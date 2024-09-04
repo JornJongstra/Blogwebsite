@@ -12,12 +12,12 @@ namespace BlogWebsiteData
         {
 	        try
 	        {
-                int categorie_id = Convert.ToInt32(blog.Categories.First().Id);
+                var categorie_id = Convert.ToInt32(blog.Categories.First().Id);
 		        using var sqlConnection = new SqlConnection(ConnectionString);
 
 		        sqlConnection.Open();
 
-		        SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[Blogs] output INSERTED.ID values (@Title, @Text, @Slug, @User_id)", sqlConnection);
+		        var cmd = new SqlCommand("INSERT INTO [dbo].[Blogs] output INSERTED.ID values (@Title, @Text, @Slug, @User_id)", sqlConnection);
 
 		        cmd.Parameters.AddWithValue("@Title", blog.Title);
 		        cmd.Parameters.AddWithValue("@Text", blog.Text);
@@ -26,9 +26,9 @@ namespace BlogWebsiteData
 
                 //cmd.ExecuteNonQuery();
 
-		        int blog_id = (int)cmd.ExecuteScalar();
+		        var blog_id = (int)cmd.ExecuteScalar();
 
-                SqlCommand cmd1 = new SqlCommand("INSERT INTO [dbo].[BlogCategories] values (@Blog_id, @Categorie_id)", sqlConnection);
+                var cmd1 = new SqlCommand("INSERT INTO [dbo].[BlogCategories] values (@Blog_id, @Categorie_id)", sqlConnection);
 
                 cmd1.Parameters.AddWithValue("@Categorie_id", categorie_id);
                 cmd1.Parameters.AddWithValue("@Blog_id", blog_id);
@@ -54,7 +54,7 @@ namespace BlogWebsiteData
 
 		        sqlConnection.Open();
 
-		        SqlCommand cmd = new SqlCommand("UPDATE [dbo].[Blogs] SET Title = @Title, Text = @Text, Slug = @Slug, User_id = @User_id WHERE Id = @Id", sqlConnection);
+		        var cmd = new SqlCommand("UPDATE [dbo].[Blogs] SET Title = @Title, Text = @Text, Slug = @Slug, User_id = @User_id WHERE Id = @Id", sqlConnection);
 
 				//cmd.Parameters.Add("@Id", SqlDbType.VarChar);
 				//cmd.Parameters["@Id"].Value = blog.Id;
@@ -68,7 +68,7 @@ namespace BlogWebsiteData
 
 				cmd.ExecuteNonQuery();
 
-				SqlCommand cmd1 = new SqlCommand("UPDATE [dbo].[BlogCategories] SET blog_id = @Blog_id, categorie_id = @Categorie_id WHERE Blog_id = @Blog_id", sqlConnection);
+				var cmd1 = new SqlCommand("UPDATE [dbo].[BlogCategories] SET blog_id = @Blog_id, categorie_id = @Categorie_id WHERE Blog_id = @Blog_id", sqlConnection);
 
 				cmd1.Parameters.AddWithValue("@Categorie_id", blog.Categories.First().Id);
 				cmd1.Parameters.AddWithValue("@Blog_id", blog.Id);
@@ -94,7 +94,7 @@ namespace BlogWebsiteData
 
 		        sqlConnection.Open();
 
-		        SqlCommand cmd = new SqlCommand("DELETE FROM [dbo].[Blogs] WHERE Blogs.Id = @Id", sqlConnection);
+		        var cmd = new SqlCommand("DELETE FROM [dbo].[Blogs] WHERE Blogs.Id = @Id", sqlConnection);
 
                 cmd.Parameters.Add("@Id", SqlDbType.Int);
                 cmd.Parameters["@Id"].Value = id;
@@ -121,23 +121,23 @@ namespace BlogWebsiteData
 
                 sqlConnection.Open();
 
-                int blogId = 0;
-                int userId = 0;
-                string title = "";
-                string text = "";
-                string author = "";
+                var blogId = 0;
+                var userId = 0;
+                var title = "";
+                var text = "";
+                var author = "";
                 List<Category> categories = new List<Category>();
 
                 //SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.User_id, Blogs.Title, Blogs.Text, Users.Username, Categories.Id, Categories.Name FROM[dbo].[Blogs] INNER JOIN[dbo].[Users] ON Blogs.User_id = Users.Id INNER JOIN[dbo].[BlogCategories] ON BlogCategories.Blog_id = Blogs.Id INNER JOIN[dbo].[Categories] ON Categories.Id = BlogCategories.Categorie_id WHERE Blogs.User_id = @UserId", sqlConnection);
 
-                SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.User_id, Blogs.Title, Blogs.Text, Users.Username FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id WHERE Blogs.Id = @Id;", sqlConnection);
+                var cmd = new SqlCommand("SELECT Blogs.Id, Blogs.User_id, Blogs.Title, Blogs.Text, Users.Username FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id WHERE Blogs.Id = @Id;", sqlConnection);
 
 				cmd.Parameters.Add("@Id", SqlDbType.Int);
 				cmd.Parameters["@Id"].Value = id;
 
                 //cmd.Parameters.AddWithValue("@Id", id);
 
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (var reader = cmd.ExecuteReader())
                 {
 	                while (reader.Read())
 	                {
@@ -151,23 +151,23 @@ namespace BlogWebsiteData
 
                 cmd.ExecuteNonQuery();
 
-                SqlCommand cmd2 = new SqlCommand("SELECT Categories.Id, Categories.Name FROM [dbo].[BlogCategories] INNER JOIN [dbo].[Categories] ON BlogCategories.Categorie_id = Categories.Id WHERE BlogCategories.Blog_id = @Blog_id", sqlConnection);
+                var cmd2 = new SqlCommand("SELECT Categories.Id, Categories.Name FROM [dbo].[BlogCategories] INNER JOIN [dbo].[Categories] ON BlogCategories.Categorie_id = Categories.Id WHERE BlogCategories.Blog_id = @Blog_id", sqlConnection);
 
 				cmd2.Parameters.Add("@Blog_id", SqlDbType.Int);
 				cmd2.Parameters["@Blog_id"].Value = id;
 
-				using (SqlDataReader reader = cmd2.ExecuteReader())
+				using (var reader = cmd2.ExecuteReader())
 				{
 					while (reader.Read())
 					{
-                        Category category = new Category(reader.GetInt32(0), reader.GetString(1));
+                        var category = new Category(reader.GetInt32(0), reader.GetString(1));
                         categories.Add(category);
 					}
 				}
 
                 
 				cmd2.ExecuteNonQuery();
-                Blog blog = new Blog(blogId, title, text, userId, author, categories);
+                var blog = new Blog(blogId, title, text, userId, author, categories);
 
                 sqlConnection.Close();
                 //Blog blog = new Blog(blogId, title, text, userId, author, categories);
@@ -197,25 +197,25 @@ namespace BlogWebsiteData
                 //string author = "";
                 //string slug = "";
 
-                SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.Title, Blogs.Text, Blogs.Slug, Users.Username, Categories.Id, Categories.Name FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id INNER JOIN [dbo].[BlogCategories] ON BlogCategories.Blog_id = Blogs.Id INNER JOIN [dbo].[Categories] ON Categories.Id = BlogCategories.Categorie_id WHERE Blogs.User_id = @UserId", sqlConnection);
+                var cmd = new SqlCommand("SELECT Blogs.Id, Blogs.Title, Blogs.Text, Blogs.Slug, Users.Username, Categories.Id, Categories.Name FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id INNER JOIN [dbo].[BlogCategories] ON BlogCategories.Blog_id = Blogs.Id INNER JOIN [dbo].[Categories] ON Categories.Id = BlogCategories.Categorie_id WHERE Blogs.User_id = @UserId", sqlConnection);
 
                 cmd.Parameters.Add("@UserId", SqlDbType.Int);
                 cmd.Parameters["@UserId"].Value = id;
 
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        int blogId = reader.GetInt32(0);
-                        string title = reader.GetString(1);
-                        string text = reader.GetString(2);
-                        string slug = reader.GetString(3);
-                        string author = reader.GetString(4);
+                        var blogId = reader.GetInt32(0);
+                        var title = reader.GetString(1);
+                        var text = reader.GetString(2);
+                        var slug = reader.GetString(3);
+                        var author = reader.GetString(4);
 						List<Category> categories = new List<Category>();
-						Category category = new Category(reader.GetInt32(5), reader.GetString(6));
+						var category = new Category(reader.GetInt32(5), reader.GetString(6));
                         categories.Add(category);
 
-                        Blog blog = new Blog(blogId, title, text, id, author, categories);
+                        var blog = new Blog(blogId, title, text, id, author, categories);
                         
                         blogs.Add(blog);
                     }
@@ -249,18 +249,18 @@ namespace BlogWebsiteData
                 //string author = "";
                 //string slug = "";
 
-                SqlCommand cmd = new SqlCommand("SELECT Blogs.Id, Blogs.Title, Blogs.Text, Blogs.Slug, Users.Username  FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id", sqlConnection);
+                var cmd = new SqlCommand("SELECT Blogs.Id, Blogs.Title, Blogs.Text, Blogs.Slug, Users.Username  FROM [dbo].[Blogs] INNER JOIN [dbo].[Users] ON Blogs.User_id = Users.Id", sqlConnection);
 
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        int blogId = reader.GetInt32(0);
-                        string title = reader.GetString(1);
-                        string text = reader.GetString(2);
-                        string slug = reader.GetString(3);
-						string author = reader.GetString(4);
-                        Blog blog = new Blog(blogId, title, text,slug, author);
+                        var blogId = reader.GetInt32(0);
+                        var title = reader.GetString(1);
+                        var text = reader.GetString(2);
+                        var slug = reader.GetString(3);
+						var author = reader.GetString(4);
+                        var blog = new Blog(blogId, title, text,slug, author);
                         blogs.Add(blog);
                     }
                 }

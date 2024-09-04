@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Classes;
-using System.Reflection.Metadata;
 
 namespace BlogWebsiteData
 {
@@ -21,17 +15,17 @@ namespace BlogWebsiteData
 
                 sqlConnection.Open();
 
-                SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[Users] WHERE Users.Id = @Id;", sqlConnection);
+                var cmd = new SqlCommand("SELECT * FROM [dbo].[Users] WHERE Users.Id = @Id;", sqlConnection);
 
                 cmd.Parameters.Add("@Id", SqlDbType.Int);
                 cmd.Parameters["@Id"].Value = id;
 
-				int userId = 0;
-				string username = "";
-				string email = "";
-				string password = "";
+				var userId = 0;
+				var username = "";
+				var email = "";
+				var password = "";
 
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using (var reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
                     {
@@ -47,10 +41,10 @@ namespace BlogWebsiteData
 
                 sqlConnection.Close();
 
-                BlogDataManager blogDataManager = new BlogDataManager();
+                var blogDataManager = new BlogDataManager();
                 List<Blog> blogs = blogDataManager.GetBlogsFromUser(id);
 
-                User user = new User(userId, username, password, email, blogs);
+                var user = new User(userId, username, password, email, blogs);
 
                 return user;
             }
@@ -67,17 +61,17 @@ namespace BlogWebsiteData
 
 				sqlConnection.Open();
 								
-				SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[Users] WHERE Users.Email = @Email;", sqlConnection);
+				var cmd = new SqlCommand("SELECT * FROM [dbo].[Users] WHERE Users.Email = @Email;", sqlConnection);
 
 				cmd.Parameters.Add("@Email", SqlDbType.NVarChar);
 				cmd.Parameters["@Email"].Value = email;
 
-				int userId = 0;
-				string username = "";
-				string userEmail = "";
-				string password = "";
+				var userId = 0;
+				var username = "";
+				var userEmail = "";
+				var password = "";
 
-				using (SqlDataReader reader = cmd.ExecuteReader())
+				using (var reader = cmd.ExecuteReader())
 				{
 					if (reader.Read())
 					{
@@ -92,7 +86,7 @@ namespace BlogWebsiteData
 
 				sqlConnection.Close();
 
-                User user = new User(userId, username, password, email);
+                var user = new User(userId, username, password, email);
 
                 return user;
 			}
@@ -109,7 +103,7 @@ namespace BlogWebsiteData
 
 				sqlConnection.Open();
 
-				SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[Users] values (@Username, @Email, @Password, @Role)", sqlConnection);
+				var cmd = new SqlCommand("INSERT INTO [dbo].[Users] values (@Username, @Email, @Password, @Role)", sqlConnection);
 
 				cmd.Parameters.AddWithValue("@Username", user.Username);
 				cmd.Parameters.AddWithValue("@Email", user.Email);

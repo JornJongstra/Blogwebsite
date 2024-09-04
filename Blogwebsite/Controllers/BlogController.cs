@@ -8,8 +8,8 @@ namespace BlogWebsite.Controllers
     {
         public IActionResult Index()
         {
-            BlogCoreManager blogCoreManager = new BlogCoreManager();
-            List<Blog> blogs = blogCoreManager.GetBlogs();
+            var blogCoreManager = new BlogCoreManager();
+            var blogs = blogCoreManager.GetBlogs();
             ViewBag.Blogs = blogs;
 			ViewBag.username = HttpContext.Session.GetString(SessionVariables.SessionKeyUsername);
 
@@ -17,8 +17,8 @@ namespace BlogWebsite.Controllers
         }
         public IActionResult Detail(int id)
         {
-            BlogCoreManager blogCoreManager = new BlogCoreManager();
-            Blog blog = blogCoreManager.GetBlog(id);
+            var blogCoreManager = new BlogCoreManager();
+            var blog = blogCoreManager.GetBlog(id);
             ViewBag.Blog = blog;
 			ViewBag.username = HttpContext.Session.GetString(SessionVariables.SessionKeyUsername);
 
@@ -27,12 +27,12 @@ namespace BlogWebsite.Controllers
 
         public IActionResult Create()
         {
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsAuthenticated()) return NotFound();
 
 			//CategorieCoreManager categorieCoreManager = new CategorieCoreManager();
-			CategoryCoreManager categoryCoreManager = new CategoryCoreManager();
-	        List<Category> categories = categoryCoreManager.GetCategories();
+			var categoryCoreManager = new CategoryCoreManager();
+	        var categories = categoryCoreManager.GetCategories();
 	        ViewBag.MyList = categories;
 			ViewBag.username = HttpContext.Session.GetString(SessionVariables.SessionKeyUsername);
 			return View();
@@ -40,18 +40,18 @@ namespace BlogWebsite.Controllers
 
         public IActionResult Update(int id)
         {
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsAuthenticated()) return NotFound();
 
 
-			BlogCoreManager blogCoreManager = new BlogCoreManager();
+			var blogCoreManager = new BlogCoreManager();
             var blog = blogCoreManager.GetBlog(id);
             ViewBag.Blog = blog;
             ViewBag.BlogCategories = blog.Categories;
 
 			if (!authController.IsOwnedByUser(blog.UserId)) return NotFound();
 
-			CategoryCoreManager categoryCoreManager = new CategoryCoreManager();
+			var categoryCoreManager = new CategoryCoreManager();
             var categories = categoryCoreManager.GetCategories();
             ViewBag.Categories = categories;
 
@@ -61,10 +61,10 @@ namespace BlogWebsite.Controllers
         }
         public IActionResult Delete(int id)
         {
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsAuthenticated()) return NotFound();
 
-			BlogCoreManager blogCoreManager = new BlogCoreManager();
+			var blogCoreManager = new BlogCoreManager();
             if (blogCoreManager.DeleteBlog(id))
             {
                 return RedirectToAction("Index", "Profile");
@@ -74,7 +74,7 @@ namespace BlogWebsite.Controllers
 
         public IActionResult CreateBlog(string blogTitle, int[] blogCategories, string blogText)
         {
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsAuthenticated()) return NotFound();
 
 			if (string.IsNullOrWhiteSpace(blogTitle))
@@ -90,15 +90,15 @@ namespace BlogWebsite.Controllers
 	            return RedirectToAction("Create");
             }
 
-            string title = "";
-            string text = "";
-            string slug = "";
-            int userId = 0;
-            DateTime createdDateTime = DateTime.Now;
+            var title = "";
+            var text = "";
+            var slug = "";
+            var userId = 0;
+            var createdDateTime = DateTime.Now;
             List<Category> categories = new List<Category>();
 
             
-            BlogCoreManager blogCoreManager = new BlogCoreManager();
+            var blogCoreManager = new BlogCoreManager();
 
             title = blogTitle;
             text = blogText;
@@ -107,13 +107,13 @@ namespace BlogWebsite.Controllers
             createdDateTime = DateTime.Now;
             categories = new List<Category>();
 
-			for (int i = 0; i < blogCategories.Length; i++)
+			for (var i = 0; i < blogCategories.Length; i++)
             {
-	            Category category = new Category(blogCategories[i]);
+	            var category = new Category(blogCategories[i]);
                 categories.Add(category);
             }
 
-            Blog blog = new Blog(title, text, slug, userId, createdDateTime, categories);
+            var blog = new Blog(title, text, slug, userId, createdDateTime, categories);
 
             if (blogCoreManager.CreateBlog(blog))
             {
@@ -126,7 +126,7 @@ namespace BlogWebsite.Controllers
         }
         public IActionResult UpdateBlog(string blogTitle, int[] blogCategories, string blogText, int blogId)
         {
-			AuthUser authController = new AuthUser(HttpContext);
+			var authController = new AuthUser(HttpContext);
 			if (!authController.IsAuthenticated()) return NotFound();
 
 			if (string.IsNullOrWhiteSpace(blogTitle))
@@ -142,15 +142,15 @@ namespace BlogWebsite.Controllers
 				return RedirectToAction("Update", blogId);
 			}
 
-            int id = 0;
-            string title = "";
-            string text = "";
-            string slug = "";
-            int userId = 0;
-            DateTime createdDateTime = DateTime.Now;
+            var id = 0;
+            var title = "";
+            var text = "";
+            var slug = "";
+            var userId = 0;
+            var createdDateTime = DateTime.Now;
             List<Category> categories = new List<Category>();
 
-            BlogCoreManager blogCoreManager = new BlogCoreManager();
+            var blogCoreManager = new BlogCoreManager();
 
 			title = blogTitle;
 			id = blogId;
@@ -160,13 +160,13 @@ namespace BlogWebsite.Controllers
 			createdDateTime = DateTime.Now;
 			categories = new List<Category>();
 
-			for (int i = 0; i < blogCategories.Length; i++)
+			for (var i = 0; i < blogCategories.Length; i++)
 			{
-				Category category = new Category(blogCategories[i]);
+				var category = new Category(blogCategories[i]);
 				categories.Add(category);
 			}
 
-            Blog blog = new Blog(id, title, text, slug, userId, createdDateTime, categories);
+            var blog = new Blog(id, title, text, slug, userId, createdDateTime, categories);
 
 			if (blogCoreManager.UpdateBlog(blog))
 			{
