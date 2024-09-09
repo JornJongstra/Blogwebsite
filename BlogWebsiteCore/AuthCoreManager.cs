@@ -16,6 +16,7 @@ namespace BlogWebsiteCore
             var regexEmail = @"^[^@\s]+@[^@\s]+.(com|net|org|gov|nl)$";
             if (!Regex.IsMatch(email, regexEmail)) return null;
 
+
             var storedUser = ServiceHandler.Service.GetUserByEmail(email);
 			if (storedUser.Password == hashedPassword)
 			{
